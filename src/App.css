@@ -28,6 +28,10 @@ main {
     text-align: center;
 
   }
+
+  img {
+    margin-inline: auto;
+  }
 }
 
 .editor {
@@ -35,7 +39,10 @@ main {
   margin-inline: auto;
   max-width: 56.25rem;
   height: 50rem;
+  border-radius: 15px;
+  overflow: hidden;
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
