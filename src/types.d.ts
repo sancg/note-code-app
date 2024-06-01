@@ -3,3 +3,5 @@ export type CodeSnippet = {
   documentation: string;
   body: string;
 };
+
+export type LanguageType = 'html' | 'css' | 'javascript'

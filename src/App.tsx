@@ -5,31 +5,27 @@ import { Editor, OnMount, useMonaco } from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
 import { AspectRatio, Box, Card, Skeleton } from '@mui/joy';
 import { addCustomSnippets, defaultValue } from './utils/editorVars';
+import { LanguageType } from './types';
 
 
 const initalState = {
   html: defaultValue,
   css: '',
-  javascript: ''
+  javascript: 'js code'
 }
-
-type LanguageType = 'html' | 'css' | 'javascript'
 
 
 function App() {
   const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
-  const [codeSnippet, setCodeSnippet] = useState(() => {
-    const codeFromLocalStorage = localStorage.getItem('code')
-    return codeFromLocalStorage === null ? initalState : JSON.parse(codeFromLocalStorage)
-  });
+  const [codeSnippet, setCodeSnippet] = useState(JSON.parse(localStorage.getItem('code')!) ?? initalState);
   const [currentLanguage, setCurrentLanguage] = useState<LanguageType>('html')
   const monaco = useMonaco();
-  console.log(codeSnippet)
 
   useEffect(() => {
-    if (localStorage.getItem('code') === null) {
-      localStorage.setItem('code', JSON.stringify(initalState))
-    }
+    localStorage.setItem('code', JSON.stringify(codeSnippet));
+  }, [codeSnippet]);
+
+  useEffect(() => {
     if (monaco) {
       addCustomSnippets(monaco);
     }
@@ -37,16 +33,12 @@ function App() {
 
   const onMount: OnMount = (editor) => {
     editorRef.current = editor;
-    // console.log(editorRef.current.getModel()?.getLanguageId())
     editor.focus();
   };
 
   const handleEditorChange = (value: string | undefined) => {
-    const snippetUpdated = { ...codeSnippet, [currentLanguage]: value }
-    setCodeSnippet(snippetUpdated)
-    localStorage.setItem('code', JSON.stringify(snippetUpdated))
+    setCodeSnippet({ ...codeSnippet, [currentLanguage]: value })
   };
-
 
 
   return (
@@ -59,8 +51,6 @@ function App() {
         theme='vs-light'
         className='editor'
         language={currentLanguage}
-        // defaultLanguage='html'
-        // defaultValue={defaultValue}
         value={codeSnippet[currentLanguage as keyof typeof codeSnippet]}
         onMount={onMount}
         onChange={handleEditorChange}
