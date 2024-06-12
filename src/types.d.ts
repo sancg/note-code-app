@@ -1,7 +1,7 @@
 export type CodeSnippet = {
-  label: string;
-  documentation: string;
-  body: string;
+  html: string;
+  css: string;
+  javascript: string;
 };
 
-export type LanguageType = 'html' | 'css' | 'javascript'
+export type LanguageType = 'html' | 'css' | 'javascript';
